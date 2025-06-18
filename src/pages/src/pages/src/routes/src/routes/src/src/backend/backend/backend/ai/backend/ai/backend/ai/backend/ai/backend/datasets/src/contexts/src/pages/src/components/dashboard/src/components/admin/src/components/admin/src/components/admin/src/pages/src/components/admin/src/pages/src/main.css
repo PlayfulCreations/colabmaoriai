@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #f4f6f8;
+}
+
+/* Accent color for app (change as you like) */
+.bg-accent {
+  background-color: #111e6c !important;
+}
+.text-accent {
+  color: #111e6c !important;
+}
