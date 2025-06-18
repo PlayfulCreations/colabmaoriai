@@ -1,0 +1,151 @@
+const API_URL = "http://localhost:8000/api";
+
+export const register = async (username: string, password: string, role: string = "user") => {
+  const res = await fetch(`${API_URL}/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password, role }),
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
+
+export const login = async (username: string, password: string) => {
+  const res = await fetch(`${API_URL}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password }),
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
+
+export const listUsers = async (token: string) => {
+  const res = await fetch(`${API_URL}/users/list?token=${token}`);
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
+
+export const deleteUser = async (username: string, token: string) => {
+  const form = new FormData();
+  form.append("username", username);
+  form.append("token", token);
+  const res = await fetch(`${API_URL}/users/delete`, {
+    method: "POST",
+    body: form,
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
+
+export const changeUserRole = async (username: string, role: string, token: string) => {
+  const form = new FormData();
+  form.append("username", username);
+  form.append("role", role);
+  form.append("token", token);
+  const res = await fetch(`${API_URL}/users/role`, {
+    method: "POST",
+    body: form,
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
+
+// Dataset APIs
+export const uploadDataset = async (file: File, token: string) => {
+  const form = new FormData();
+  form.append("file", file);
+  form.append("token", token);
+  const res = await fetch(`${API_URL}/datasets/upload`, {
+    method: "POST",
+    body: form,
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
+
+export const listDatasets = async (token: string) => {
+  const res = await fetch(`${API_URL}/datasets/list?token=${token}`);
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
+
+export const downloadDataset = (filename: string, token: string) => {
+  return `${API_URL}/datasets/download/${filename}?token=${token}`;
+};
+
+// AI APIs
+export const generateText = async (text: string, token: string) => {
+  const form = new FormData();
+  form.append("text", text);
+  form.append("token", token);
+  const res = await fetch(`${API_URL}/ai/generate`, {
+    method: "POST",
+    body: form,
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
+
+export const translateText = async (text: string, target_lang: string, token: string) => {
+  const form = new FormData();
+  form.append("text", text);
+  form.append("target_lang", target_lang);
+  form.append("token", token);
+  const res = await fetch(`${API_URL}/ai/translate`, {
+    method: "POST",
+    body: form,
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
+
+export const summarizeText = async (text: string, token: string) => {
+  const form = new FormData();
+  form.append("text", text);
+  form.append("token", token);
+  const res = await fetch(`${API_URL}/ai/summarize`, {
+    method: "POST",
+    body: form,
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
+
+export const analyzeSentiment = async (text: string, token: string) => {
+  const form = new FormData();
+  form.append("text", text);
+  form.append("token", token);
+  const res = await fetch(`${API_URL}/ai/sentiment`, {
+    method: "POST",
+    body: form,
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
+
+// Training APIs (Admin)
+export const startTraining = async (dataset: string, epochs: number, token: string) => {
+  const form = new FormData();
+  form.append("dataset", dataset);
+  form.append("epochs", epochs.toString());
+  form.append("token", token);
+  const res = await fetch(`${API_URL}/train/start`, {
+    method: "POST",
+    body: form,
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
+
+export const listTrainingJobs = async (token: string) => {
+  const res = await fetch(`${API_URL}/train/jobs?token=${token}`);
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
+
+export const getTrainingJob = async (job_id: string, token: string) => {
+  const res = await fetch(`${API_URL}/train/job/${job_id}?token=${token}`);
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
